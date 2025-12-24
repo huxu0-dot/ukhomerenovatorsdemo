@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The XYZ Renovators | Premium UK Home Transformations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <style>
+        :root {
+            --primary-dark: #0a0f0b;
+            --secondary-dark: #1a1f1c;
+            --accent-gold: #d4af37;
+            --accent-copper: #b87333;
+            --accent-marble: #e8e6e1;
+            --text-light: #f5f5f5;
+            --text-gray: #b0b0b0;
+            --gradient-dark: linear-gradient(135deg, #0a0f0b 0%, #1a1f1c 100%);
+            --gradient-gold: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            --gradient-copper: linear-gradient(135deg, #b87333 0%, #daa520 100%);
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --shadow-medium: 0 15px 40px rgba(0, 0, 0, 0.4);
+            --shadow-strong: 0 20px 50px rgba(0, 0, 0, 0.5);
+            --border-glow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, .logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--accent-marble);
+        }
+
+        /* Elegant Particle Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* Header with Dark Elegance */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 25px 0;
+            background: rgba(10, 15, 11, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow-soft);
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            background: rgba(10, 15, 11, 0.98);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--accent-marble);
+            position: relative;
+            padding-right: 15px;
+            text-decoration: none;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo span {
+            color: var(--accent-gold);
+        }
+
+        .logo:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 35px;
+            background: var(--accent-gold);
+            animation: elegantBlink 2s infinite;
+        }
+
+        @keyframes elegantBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 40px;
+            position: relative;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 8px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gold);
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        .nav-links a:hover:before {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--accent-gold);
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Hero Section with Dark Luxury */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 80px;
+            background: linear-gradient(rgba(10, 15, 11, 0.9), rgba(26, 31, 28, 0.8));
+        }
+
+        .hero-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .hero-video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.4) contrast(1.2);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            color: var(--text-light);
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            color: var(--accent-marble);
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 40px;
+            color: var(--text-gray);
+            max-width: 600px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 18px 45px;
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-soft);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+
+        .cta-button:hover:before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Floating Materials Animation */
+        .floating-materials {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-material {
+            position: absolute;
+            font-size: 32px;
+            color: rgba(212, 175, 55, 0.3);
+            animation: floatMaterials 20s infinite linear;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .floating-material:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 25s;
+        }
+
+        .floating-material:nth-child(2) {
+            top: 60%;
+            left: 80%;
+            animation-delay: 5s;
+            animation-duration: 30s;
+        }
+
+        .floating-material:nth-child(3) {
+            top: 80%;
+            left: 20%;
+            animation-delay: 10s;
+            animation-duration: 20s;
+        }
+
+        @keyframes floatMaterials {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translate(100px, -150px) rotate(90deg);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(200px, 0) rotate(180deg);
+                opacity: 0.3;
+            }
+            75% {
+                transform: translate(100px, 150px) rotate(270deg);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+                opacity: 0.3;
+            }
+        }
+
+        /* Services Section */
+        .section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 3.2rem;
+            display: inline-block;
+            position: relative;
+            padding-bottom: 20px;
+            color: var(--accent-marble);
+        }
+
+        .section-title h2:before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--gradient-gold);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            max-width: 700px;
+            margin: 20px auto 0;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            perspective: 1000px;
+        }
+
+        .service-card {
+            height: 450px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: var(--shadow-strong);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .service-card:hover .service-img img {
+            transform: scale(1.1);
+        }
+
+        .card-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: var(--secondary-dark);
+        }
+
+        .service-img {
+            height: 60%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .service-img:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(10, 15, 11, 0.8), transparent);
+        }
+
+        .service-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .service-content {
+            padding: 30px;
+            height: 40%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .service-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent-marble);
+        }
+
+        .service-content p {
+            color: var(--text-gray);
+            font-size: 1rem;
+        }
+
+        .service-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-dark);
+            font-size: 24px;
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Projects Gallery */
+        .projects-slider {
+            width: 100%;
+            height: 650px;
+            position: relative;
+        }
+
+        .swiper {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .swiper-slide {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+            filter: brightness(0.8);
+        }
+
+        .swiper-slide:hover img {
+            transform: scale(1.1);
+            filter: brightness(1);
+        }
+
+        .project-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(10, 15, 11, 0.95), transparent);
+            transform: translateY(100%);
+            transition: transform 0.5s ease;
+            color: white;
+        }
+
+        .swiper-slide:hover .project-overlay {
+            transform: translateY(0);
+        }
+
+        .project-overlay h3 {
+            color: var(--accent-marble);
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .project-overlay p {
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+
+        .project-tag {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .swiper-button-next, .swiper-button-prev {
+            color: var(--accent-gold) !important;
+            background: rgba(10, 15, 11, 0.8);
+            width: 60px !important;
+            height: 60px !important;
+            border-radius: 50%;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .swiper-button-next:after, .swiper-button-prev:after {
+            font-size: 24px !important;
+        }
+
+        /* Map Section */
+        .map-section {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 15px;
+            z-index: 1;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(10, 15, 11, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            z-index: 2;
+            max-width: 350px;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--accent-gold);
+            color: var(--text-light);
+        }
+
+        .map-overlay h3 {
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+        }
+
+        .map-overlay i {
+            color: var(--accent-gold);
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .map-overlay p {
+            color: var(--text-gray);
+            margin-bottom: 10px;
+        }
+
+        /* AI Chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chatbot-toggle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chatbot-toggle:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-copper);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .chatbot-toggle:hover:before {
+            opacity: 1;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .chatbot-toggle i {
+            position: relative;
+            z-index: 1;
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 90px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: var(--secondary-dark);
+            border-radius: 20px;
+            box-shadow: var(--shadow-strong);
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px) scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .chatbot-header {
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            font-size: 1.3rem;
+            color: var(--primary-dark);
+        }
+
+        .close-chatbot {
+            background: none;
+            border: none;
+            color: var(--primary-dark);
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .close-chatbot:hover {
+            transform: rotate(90deg);
+        }
+
+        .chatbot-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: var(--primary-dark);
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 85%;
+            padding: 15px;
+            border-radius: 15px;
+            line-height: 1.5;
+            animation: messageAppear 0.3s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .bot-message {
+            background: var(--secondary-dark);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+            color: var(--text-light);
+        }
+
+        .user-message {
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 20px;
+            background: var(--secondary-dark);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .chatbot-input input {
+            flex-grow: 1;
+            padding: 15px 20px;
+            background: var(--primary-dark);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 30px;
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .chatbot-input input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
+        }
+
+        .send-button {
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-left: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .send-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary-dark);
+            padding: 80px 0 30px;
+            position: relative;
+            overflow: hidden;
+            color: var(--text-light);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        footer:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-gold);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-marble);
+            margin-bottom: 20px;
+        }
+
+        .footer-logo span {
+            color: var(--accent-gold);
+        }
+
+        .footer-links h4 {
+            color: var(--accent-gold);
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-links h4:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--gradient-gold);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+            transform: translateX(0);
+            transition: transform 0.3s;
+        }
+
+        .footer-links li:hover {
+            transform: translateX(10px);
+        }
+
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--accent-gold);
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            color: var(--text-gray);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 3.8rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                height: 100vh;
+                background: rgba(10, 15, 11, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+                z-index: 999;
+                border-left: 1px solid rgba(212, 175, 55, 0.1);
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 20px 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .chatbot-window {
+                width: 320px;
+                right: -20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 90vh;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .section {
+                padding: 80px 0;
+            }
+            
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+            
+            .projects-slider {
+                height: 500px;
+            }
+            
+            .service-card {
+                height: 400px;
+            }
+            
+            .chatbot-window {
+                width: 300px;
+                height: 450px;
+                bottom: 90px;
+            }
+            
+            .chatbot-toggle {
+                width: 65px;
+                height: 65px;
+                font-size: 26px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 20px;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .cta-button {
+                padding: 15px 30px;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .map-overlay {
+                position: relative;
+                top: 0;
+                left: 0;
+                max-width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            #map {
+                height: 400px;
+            }
+            
+            .chatbot-window {
+                width: 280px;
+                right: -40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Elegant Particle Background -->
+    <div id="particles-js"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">XYZ <span>Renovators</span></a>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#map">Locations</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-video-container">
+            <video autoplay muted loop playsinline>
+                <source src="https://assets.mixkit.co/videos/preview/mixkit-architect-working-on-a-3d-model-of-a-house-41580-large.mp4" type="video/mp4">
+                Your browser does not support HTML5 video.
+            </video>
+        </div>
+        <div class="floating-materials">
+            <div class="floating-material"><i class="fas fa-gem"></i></div>
+            <div class="floating-material"><i class="fas fa-cube"></i></div>
+            <div class="floating-material"><i class="fas fa-square"></i></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Crafting Luxury Living Spaces</h1>
+                <p class="hero-subtitle">Transforming homes across the UK with premium materials, exquisite craftsmanship, and timeless design. Where vision meets precision.</p>
+                <a href="#contact" class="cta-button">
+                    <span>Start Your Journey</span>
+                    <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Premium Renovation Services</h2>
+                <p>Expert craftsmanship meets innovative design in every project we undertake. Excellence in every detail.</p>
+            </div>
+            <div class="services-grid">
+                <!-- Service 1 - Kitchen Renovations -->
+                <div class="service-card">
+                    <div class="card-front">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Luxury Kitchen Renovation">
+                            <div class="service-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <h3>Luxury Kitchen Design</h3>
+                            <p>Bespoke kitchens crafted with premium materials, intelligent storage, and exquisite finishes for culinary excellence.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 2 - Bathroom Renovations (UPDATED IMAGE) -->
+                <div class="service-card">
+                    <div class="card-front">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Luxury Bathroom Renovation">
+                            <div class="service-icon">
+                                <i class="fas fa-bath"></i>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <h3>Bathroom Transformations</h3>
+                            <p>Complete bathroom renovations with modern fixtures, premium tiling, and intelligent space planning for daily luxury.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 3 - Home Extensions -->
+                <div class="service-card">
+                    <div class="card-front">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Modern Home Extension">
+                            <div class="service-icon">
+                                <i class="fas fa-expand-alt"></i>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <h3>Architectural Extensions</h3>
+                            <p>Seamless space expansion that enhances your home's architecture while adding significant value.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 4 - Living Room Renovations -->
+                <div class="service-card">
+                    <div class="card-front">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Living Room Renovation">
+                            <div class="service-icon">
+                                <i class="fas fa-couch"></i>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <h3>Living Space Renovations</h3>
+                            <p>Transform your living areas with custom lighting, premium flooring, and bespoke storage solutions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 5 - Bedroom Renovations -->
+                <div class="service-card">
+                    <div class="card-front">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Bedroom Renovation">
+                            <div class="service-icon">
+                                <i class="fas fa-bed"></i>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <h3>Bedroom Makeovers</h3>
+                            <p>Create your perfect sanctuary with custom wardrobes, premium lighting, and bespoke bedroom design.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 6 - Exterior Renovations -->
+                <div class="service-card">
+                    <div class="card-front">
+                        <div class="service-img">
+                            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Exterior Renovation">
+                            <div class="service-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                        </div>
+                        <div class="service-content">
+                            <h3>Exterior Transformations</h3>
+                            <p>Enhance curb appeal with premium landscaping, outdoor living spaces, and architectural detailing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Gallery -->
+    <section class="section" id="projects">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Masterpieces</h2>
+                <p>Experience the transformation through our portfolio of exceptional renovation projects.</p>
+            </div>
+            <div class="projects-slider">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Modern Living Room Renovation">
+                            <div class="project-overlay">
+                                <h3>London Penthouse</h3>
+                                <p>Complete transformation of a Mayfair penthouse with custom finishes and panoramic city views</p>
+                                <span class="project-tag">Complete Renovation</span>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Modern Kitchen Renovation">
+                            <div class="project-overlay">
+                                <h3>Manchester Kitchen</h3>
+                                <p>Luxury kitchen renovation with custom cabinetry, premium appliances, and marble finishes</p>
+                                <span class="project-tag">Kitchen Renovation</span>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Luxury Living Room Renovation">
+                            <div class="project-overlay">
+                                <h3>Birmingham Living Space</h3>
+                                <p>Complete living room renovation with custom lighting and premium furnishings</p>
+                                <span class="project-tag">Living Room Renovation</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="section map-section" id="map">
+        <div class="container">
+            <div class="section-title">
+                <h2>Visit Our Showroom</h2>
+                <p>Located in London's design district, our showroom showcases premium materials and design concepts.</p>
+            </div>
+            <div class="map-overlay">
+                <h3><i class="fas fa-map-marker-alt"></i> XYZ Renovators Showroom</h3>
+                <p><i class="fas fa-location-dot"></i> 42 Design Avenue, London W1</p>
+                <p><i class="fas fa-clock"></i> Open Mon-Sat: 9AM-6PM</p>
+                <p><i class="fas fa-phone"></i> +44 20 7123 4567</p>
+                <p><i class="fas fa-envelope"></i> visit@xyzrenovators.co.uk</p>
+            </div>
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">XYZ <span>Renovators</span></div>
+                    <p style="color: var(--text-gray);">Transforming homes across the UK with exceptional craftsmanship, innovative design, and unwavering attention to detail since 2005.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#map">Showroom</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Our Services</h4>
+                    <ul>
+                        <li><a href="#services">Luxury Kitchen Design</a></li>
+                        <li><a href="#services">Bathroom Transformations</a></li>
+                        <li><a href="#services">Architectural Extensions</a></li>
+                        <li><a href="#services">Living Space Renovations</a></li>
+                        <li><a href="#services">Bedroom Makeovers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 42 Design Avenue, London W1</li>
+                        <li><i class="fas fa-phone"></i> +44 20 7123 4567</li>
+                        <li><i class="fas fa-envelope"></i> info@xyzrenovators.co.uk</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8AM-6PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 XYZ Renovators. All rights reserved. | Premium Home Renovations UK</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h3><i class="fas fa-comments" style="margin-right: 10px;"></i> Renovation Consultant</h3>
+                <button class="close-chatbot" id="closeChatbot">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    <strong>Welcome to XYZ Renovations.</strong><br>
+                    How may I assist you with your luxury home transformation?
+                </div>
+                <div class="message bot-message">
+                    I can help with:
+                    <ul style="margin-top: 10px; margin-left: 15px;">
+                        <li>Service consultations</li>
+                        <li>Project planning</li>
+                        <li>Material selection</li>
+                        <li>Timeline estimates</li>
+                        <li>Showroom visits</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatInput" placeholder="Ask about renovations...">
+                <button class="send-button" id="sendMessage">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-comments"></i>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize Particles.js for dark luxury theme
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 70, density: { enable: true, value_area: 800 } },
+                color: { value: "#d4af37" },
+                shape: { type: "circle" },
+                opacity: { value: 0.2, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#d4af37",
+                    opacity: 0.1,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" }
+                }
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Animate service cards on scroll
+            const serviceCards = document.querySelectorAll('.service-card');
+            serviceCards.forEach((card, index) => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if (cardPosition < screenPosition) {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 200);
+                }
+            });
+        });
+
+        // Initialize Swiper
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            speed: 1000,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+        });
+
+        // Initialize Map
+        function initMap() {
+            // Coordinates for London showroom
+            const showroomLocation = [51.5074, -0.1278];
+            
+            const map = L.map('map').setView(showroomLocation, 13);
+            
+            // Dark theme map tiles
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+            
+            // Custom gold icon
+            const customIcon = L.divIcon({
+                html: '<i class="fas fa-home" style="font-size: 40px; color: #d4af37; text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);"></i>',
+                iconSize: [40, 40],
+                className: 'custom-marker'
+            });
+            
+            // Add marker for showroom
+            L.marker(showroomLocation, { icon: customIcon }).addTo(map)
+                .bindPopup('<b>XYZ Renovators Showroom</b><br>42 Design Avenue, London W1<br>Open Mon-Sat: 9AM-6PM')
+                .openPopup();
+                
+            // Add a restaurant marker
+            const restaurantLocation = [51.515, -0.14];
+            L.marker(restaurantLocation).addTo(map)
+                .bindPopup('<b>The Renovation Lounge</b><br>Premium café for project discussions<br>Open daily 7AM-8PM');
+        }
+        
+        // Initialize map when page loads
+        document.addEventListener('DOMContentLoaded', initMap);
+
+        // AI Chatbot
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const closeChatbot = document.getElementById('closeChatbot');
+        const sendMessageBtn = document.getElementById('sendMessage');
+        const chatInput = document.getElementById('chatInput');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        
+        // Toggle chatbot window
+        chatbotToggle.addEventListener('click', () => {
+            chatbotWindow.style.display = 'flex';
+            chatbotToggle.style.display = 'none';
+            
+            // Auto ask questions when opened
+            setTimeout(() => {
+                addMessage("What type of renovation are you considering? I can provide insights on materials, timelines, and design options.", false);
+            }, 1000);
+        });
+        
+        closeChatbot.addEventListener('click', () => {
+            chatbotWindow.style.display = 'none';
+            chatbotToggle.style.display = 'flex';
+        });
+        
+        // Chatbot responses - Updated for new services
+        const botResponses = {
+            "hello": "Welcome to XYZ Renovations. How may I assist with your home transformation project?",
+            "hi": "Hello! I'm here to help you plan your renovation project. What would you like to know?",
+            "services": "Our premium services: 1) Luxury Kitchen Design 2) Bathroom Transformations 3) Architectural Extensions 4) Living Space Renovations 5) Bedroom Makeovers 6) Exterior Transformations",
+            "kitchen": "Luxury kitchen renovations take 6-10 weeks. We use premium materials like marble, quartz, and custom cabinetry. Starting from £35,000.",
+            "bathroom": "Bathroom renovations take 4-8 weeks. Features include modern fixtures, premium tiling, heated floors, and intelligent lighting. Starting from £25,000.",
+            "extension": "Architectural extensions require 3-6 months including planning. We ensure seamless integration with premium finishes.",
+            "living": "Living space renovations take 4-8 weeks. Includes custom storage, premium flooring, and bespoke lighting solutions.",
+            "bedroom": "Bedroom makeovers take 3-6 weeks. Features custom wardrobes, premium lighting, and bespoke bedroom design.",
+            "cost": "Premium renovation costs: Kitchen £35k-£80k, Bathroom £25k-£50k, Extension £50k-£150k, Living Space £20k-£60k.",
+            "timeline": "Project timelines: Kitchen (6-10 weeks), Bathroom (4-8 weeks), Extension (3-6 months), Living Space (4-8 weeks), Bedroom (3-6 weeks).",
+            "materials": "We work with premium materials: marble, granite, quartz, hardwood, custom metalwork, and designer fixtures from leading brands.",
+            "consultation": "We offer complimentary design consultations to discuss your vision, budget, and timeline. Would you like to schedule one?",
+            "showroom": "Visit our showroom at 42 Design Avenue, London W1 to see material samples and design concepts. Open Mon-Sat 9AM-6PM.",
+            "premium": "Our premium service includes: project management, premium material sourcing, custom craftsmanship, and post-completion support.",
+            "default": "For detailed consultation on your renovation project, I recommend speaking with our design specialists. Call 020 7123 4567."
+        };
+        
+        // Function to add message to chat
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.textContent = message;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        
+        // Function to process user input
+        function processUserInput() {
+            const userInput = chatInput.value.trim().toLowerCase();
+            
+            if (!userInput) return;
+            
+            // Add user message
+            addMessage(userInput, true);
+            chatInput.value = '';
+            
+            // Find appropriate response
+            let response = botResponses.default;
+            
+            // Check for keywords
+            const keywords = Object.keys(botResponses);
+            for (const keyword of keywords) {
+                if (userInput.includes(keyword)) {
+                    response = botResponses[keyword];
+                    break;
+                }
+            }
+            
+            // Add bot response with slight delay
+            setTimeout(() => {
+                addMessage(response);
+            }, 600);
+        }
+        
+        // Event listeners for sending messages
+        sendMessageBtn.addEventListener('click', processUserInput);
+        
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                processUserInput();
+            }
+        });
+        
+        // Initialize service card animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const serviceCards = document.querySelectorAll('.service-card');
+            serviceCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 300 + (index * 200));
+            });
+        });
+    </script>
+</body>
+</html>
